@@ -10,10 +10,9 @@
     <meta name="author" content="">
     <link rel="icon" href="favicon.ico">
 
-    <title>dict</title>
+    <title>小猪仔离开的日子</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    {% module Template('script_ref.html')%}
 
 
     <!-- Custom styles for this template -->
@@ -24,19 +23,13 @@
             padding-top: 50px;
         }
         .starter-template {
-            padding: 40px 0;
-            text-align: left;
-        }
-        .search-box{
-            width: 100px;
+            padding: 40px 15px;
+            text-align: center;
         }
     </style>
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+
+
 </head>
 
 <body>
@@ -67,19 +60,30 @@
     <div class="starter-template">
         <!--<h1>Bootstrap starter template</h1>-->
         <!--<p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>-->
-
-
-        <form class="bs-example bs-example-form" role="form">
-                <div class="col-lg-7">
-                    <div class="input-group">
-                        <input type="text" class="form-control"placeholder="Search...">
-                        <span class="input-group-btn">
-                        <button class="btn btn-default" type="button">Go!</button>
-                    </span>
-                    </div><!-- /input-group -->
-                </div><!-- /.col-lg-6 -->
-            </div><!-- /.row -->
-        </form>
+        <p class="lead">
+            小猪仔离开时间：
+            <span id="TOL" class="big_time"></span>
+        </p>
+        <p class="lead">
+            小猪仔离开的第
+            <span id="TOL_d" class="big_time"></span>
+            天
+        </p>
+        <p class="lead">
+            小猪仔离开的第
+            <span id="TOL_h" class="big_time"></span>
+            个小时
+        </p>
+        <p class="lead">
+            小猪仔离开的第
+            <span id="TOL_m" class="big_time"></span>
+            分钟
+        </p>
+        <p class="lead">
+            小猪仔离开的第
+            <span id="TOL_s" class="big_time"></span>
+            秒
+        </p>
     </div>
 
 </div><!-- /.container -->
@@ -88,34 +92,31 @@
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 
 <script type="text/javascript">
-    function get_url(word) {
-        //return 'http://cn.bing.com/dict/search?q='+word+'&go=%E6%90%9C%E7%B4%A2&qs=n&form=Z9LH5&sp=-1&pq='+word+'&sc=8-5&sk=&cvid=1026B339A8EA48DEA3EC59C4B2CFCD14'
-        return 'http://cn.bing.com/dict/search?q='+word;
+    function main() {
+        single();
+        setInterval(function(){single()},1000);
     }
 
-    function go_bing_query(word) {
-        $.ajax(
-            get_url(word),
-            {
-                dataType: 'jsonp',
-                jsonp:"callback",
-                jsonpCallback:"success_jsonp",
-                success: function (data) {
-                    if(data){
-                        console.log(1);
-                        return $(data).find('.def_pa');
-                    }
+    function single() {
+        console.log('single once');
+        var init_time = new Date('2017/08/12 07:50:00');
 
-
-                }
-            }
-        );
+        var cur_time = new Date();
+        var s_delta = (cur_time-init_time)/1000;
+        $("#TOL").html(init_time.toLocaleString());
+        $("#TOL_s").html(Math.ceil(s_delta));
+        $("#TOL_m").html(Math.ceil(s_delta/60));
+        $("#TOL_h").html(Math.ceil(s_delta/3600));
+        $("#TOL_d").html(Math.ceil(s_delta/3600/24));
     }
+
+    $(document).ready(function () {
+        main();
+    })
 </script>
+
 </body>
 </html>

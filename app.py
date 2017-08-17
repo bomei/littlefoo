@@ -4,6 +4,10 @@ import tornado.gen
 import tornado.web
 import tornado.ioloop
 import tornado.template
+import requests
+from bs4 import BeautifulSoup
+import json
+
 
 def gen_url(word):
     return 'http://cn.bing.com/dict/search?q={}&go=%E6%90%9C%E7%B4%A2&qs=n&form=Z9LH5&sp=-1&pq={}&sc=8-5&sk=&cvid=1026B339A8EA48DEA3EC59C4B2CFCD14'.format(
@@ -24,7 +28,20 @@ class BaseHandler(tornado.web.RequestHandler):
 
 class IndexHandler(BaseHandler):
     def get(self):
-        self.render('LT_boostrap.html')
+        self.render('LT_bootstrap.html')
+
+
+class DictHandler(BaseHandler):
+    def get(self):
+        self.render('dict_bootstrap.html')
+
+    def post(self):
+        word = self.get_argument('word',None)
+        if word is not None:
+            bs = BeautifulSoup(requests.get(gen_url(word)).text,"lxml")
+            res = bs.find_all(attrs={'class':'def_pa'})
+            print(1)
+            self.write(json.dumps({'1':[str(each) for each in res]}))
 
 
 if __name__ == '__main__':
@@ -42,7 +59,7 @@ if __name__ == '__main__':
         handlers=[
             (r"/", IndexHandler),
             (r"/index", IndexHandler),
-
+            (r"/dict", DictHandler)
         ],
         **settings
     )

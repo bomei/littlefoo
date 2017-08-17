@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+    {% module Template('script_ref.html')%}
+    <title>dict</title>
+    <script type="text/javascript">
+        function get_xsrf() {
+            return $("input[name='_xsrf']").val();
+        }
+
+        function onQuery() {
+            console.log('query ....');
+            var word = $('#w-input').val();
+            query_word(word);
+        }
+
+        function query_word(word) {
+            $.post("/dict", {'word':word,'_xsrf':get_xsrf()},function (data, status) {
+                if (status === 'success') {
+                    if (data !== 'No') {
+//                    data = JSON.parse(data);
+                        var res = JSON.parse(data)['1'];
+                        var insert_html='';
+                        for(var i in res){
+                            insert_html+=res[i];
+                        }
+                        insert_html=insert_html.replace(/span/g,'p');
+                        $("#result").html(insert_html);
+//                    $(".def_pa").attr({'class': 'col-md-4'});
+
+                    }
+                }
+            });
+        }
+
+        //    $(function(){
+        //        $('#w-input').bind('keypress',function(event){
+        //            if(event.keyCode === 13)
+        //            {
+        //                onQuery();
+        //            }
+        //        });
+        //    });
+        $(document).keydown(function(event){
+            if(event.keyCode === 13){
+                $('#stupid-btn').click();
+            }
+        });
+
+    </script>
+    <!-- Custom styles for this template -->
+    <!--<link href="starter-template.css" rel="stylesheet">-->
+
+    <style type="text/css">
+        body {
+            padding-top: 50px;
+        }
+        .starter-template {
+            padding: 20px 0;
+            text-align: left;
+        }
+        .search-box{
+            width: 100px;
+        }
+        div#result{
+            padding-top: 20px;
+        }
+        .bil{
+            font-weight:bold;
+        }
+    </style>
+
+
+</head>
+
+<body>
+
+
+<div class="container">
+
+    <div class="starter-template">
+        <!--<h1>Bootstrap starter template</h1>-->
+        <!--<p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>-->
+
+
+        <div class="bs-example bs-example-form" role="form">
+            <div class="row">
+                <div class="col-lg-7">
+                    <div class="input-group">
+                        <input type="text" id='w-input' class="form-control" placeholder="Search...">
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" onclick="onQuery()" id="stupid-btn">Go!</button>
+                    </span>
+                        <input type="text" value="解决bootstrap与AJAX异步提交表单的冲突" hidden >
+                    </div><!-- /input-group -->
+                </div><!-- /.col-lg-6 -->
+            </div><!-- /.row -->
+        </div>
+        <div id="result"></div>
+    </div>
+
+</div><!-- /.container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+
+
+
+</body>
+</html>
