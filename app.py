@@ -38,11 +38,15 @@ class DictHandler(BaseHandler):
     def post(self):
         word = self.get_argument('word',None)
         if word is not None:
-            bs = BeautifulSoup(requests.get(gen_url(word)).text,"lxml")
+            bs = BeautifulSoup(requests.get(gen_url(word)).text)
             res = bs.find_all(attrs={'class':'def_pa'})
             print(1)
             self.write(json.dumps({'1':[str(each) for each in res]}))
 
+
+class QRCodeHandler(BaseHandler):
+    def get(self):
+        self.render('solve_qrcode.html')
 
 if __name__ == '__main__':
     settings = {
@@ -59,7 +63,8 @@ if __name__ == '__main__':
         handlers=[
             (r"/", IndexHandler),
             (r"/index", IndexHandler),
-            (r"/dict", DictHandler)
+            (r"/dict", DictHandler),
+            (r'/qrcode',QRCodeHandler)
         ],
         **settings
     )
