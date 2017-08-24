@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Solve!</title>
+
+    {% module Template('script_include_bootstrap.html')%}
+    <!--{% module Template('script_include_jsqrcode.html')%}-->
+    <script type="text/javascript" src="{{static_url('fileinput.js')}}"></script>
+
+    <link href="{{static_url('css/fileinput.css')}}" rel="stylesheet">
+</head>
+<body>
+<div class="container kv-main">
+
+    <br>
+    <form enctype="multipart/form-data">
+
+        <div class="form-group">
+            <input id="file-1" type="file" multiple class="file" data-overwrite-initial="false" data-min-file-count="1">
+        </div>
+
+    </form>
+</div>
+
+</body>
+<script>
+
+    $("#file-1").fileinput({
+        uploadUrl: '../static/img', // you must set a valid URL here else you will get an error
+        allowedFileExtensions: ['jpg', 'png', 'gif'],
+        overwriteInitial: false,
+        maxFileSize: 1000,
+        maxFilesNum: 10,
+        //allowedFileTypes: ['image', 'video', 'flash'],
+        slugCallback: function (filename) {
+            return filename.replace('(', '_').replace(']', '_');
+        }
+    });
+
+</script>
+
+</html>
