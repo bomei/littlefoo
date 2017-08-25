@@ -4,7 +4,7 @@
 <head>
     {% module Template('script_include_bootstrap.html')%}
     {% module Template('script_include_jsqrcode.html')%}
-    <title>Upload Files using XMLHttpRequest - Minimal</title>
+    <title>Solve QRCODE!</title>
 
     <script type="text/javascript">
         function fileSelected() {
@@ -74,37 +74,55 @@
             alert("The upload has been canceled by the user or the browser dropped the connection.");
         }
     </script>
+
+    <style type="text/css">
+        body {
+            padding-top: 50px;
+        }
+        .starter-template {
+            padding: 40px 15px;
+            text-align: left;
+        }
+    </style>
+
 </head>
 <body>
-<form id="form1">
-    <div>
-        <label for="fileToUpload">Select a File to Upload</label>
-        <input type="file" name="fileToUpload" id="fileToUpload" onchange="fileSelected();"/>
+
+
+<div class="container">
+
+    <div class="starter-template">
+        <!--<h1>Bootstrap starter template</h1>-->
+        <!--<p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>-->
+
+        <form id="form1">
+            <p class="lead">
+                <label for="fileToUpload">Select a File to Upload</label>
+                <input type="file" name="fileToUpload" id="fileToUpload" onchange="fileSelected();"/>
+            </p>
+            <div id="fileName"></div>
+            <div id="fileSize"></div>
+            <div id="fileType"></div>
+            <div>
+                <input type="button" onclick="turnFileToLocalURL()" value="Upload" />
+            </div>
+            <div id="progressNumber"></div>
+
+        </form>
+
+        <div id="qrcode-res"></div>
+
+        <form id="form2" style="display:none" method="post" action="/qrcode">
+            <div>
+                <input id="qr-url" type="text" name="qr-url">
+                <input type="submit" id="submit-btn">
+            </div>
+
+        </form>
+
     </div>
-    <div id="fileName"></div>
-    <div id="fileSize"></div>
-    <div id="fileType"></div>
-    <div>
-        <input type="button" onclick="turnFileToLocalURL()" value="Upload" />
-    </div>
-    <div id="progressNumber"></div>
 
-</form>
-
-    <div id="qrcode-res"></div>
-
-<form id="form2" style="display:none" method="post" action="/qrcode">
-    <div>
-        <input id="qr-url" type="text" name="qr-url">
-        <input type="submit" id="submit-btn">
-    </div>
-
-</form>
-
-
-</body>
-</html>
-
+</div><!-- /.container -->
 
 
 </body>

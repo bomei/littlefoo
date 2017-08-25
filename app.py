@@ -5,6 +5,8 @@ import requests
 import tornado.web
 from bs4 import BeautifulSoup
 
+from pingjiao.pingjiao import Pingjiao
+
 
 class BaseHandler(tornado.web.RequestHandler):
     def get_current_user(self):
@@ -52,6 +54,9 @@ class QRCodeHandler(BaseHandler):
         if url is not None:
             with open(url_file, 'w', encoding='utf-8') as f:
                 f.write(url)
+            pj = Pingjiao(url, dry_run=False)
+            pj.run()
+        self.write(url)
 
 
 class PingjiaoHandler(BaseHandler):
@@ -59,9 +64,9 @@ class PingjiaoHandler(BaseHandler):
         import os
         url_file = 'latest_url.txt'
         if os.path.exists(url_file):
-            with open(url_file,'r',encoding='utf-8') as f:
-                url=f.read()
-            print('send url',url)
+            with open(url_file, 'r', encoding='utf-8') as f:
+                url = f.read()
+            print('send url', url)
             self.write(url)
 
 
