@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    {% module Template('script_include_bootstrap.html')%}
+    {% module Template('script_include_jsqrcode.html')%}
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>Logs</title>
+
+    <!--{% module Template('script_include_bootstrap.html')%}-->
+
+
+    <!-- Custom styles for this template -->
+    <!--<link href="starter-template.css" rel="stylesheet">-->
+
+    <style type="text/css">
+        body {
+            padding-top: 50px;
+        }
+        .starter-template {
+            padding: 40px 15px;
+            text-align: left;
+        }
+    </style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container">
+
+    <div class="starter-template">
+        {%raw logs%}
+    </div>
+
+</div><!-- /.container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+
+
+
+</body>
+</html>

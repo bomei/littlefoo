@@ -59,15 +59,17 @@ class QRCodeHandler(BaseHandler):
         self.write(url)
 
 
-class PingjiaoHandler(BaseHandler):
-    def get(self, *args, **kwargs):
-        import os
-        url_file = 'latest_url.txt'
-        if os.path.exists(url_file):
-            with open(url_file, 'r', encoding='utf-8') as f:
-                url = f.read()
-            print('send url', url)
-            self.write(url)
+class WatchLogHandler(BaseHandler):
+    def get(self):
+        log_file = os.listdir('log')
+        log_html=''
+        for file in log_file:
+            log_html+='<h1>{}</h1>'.format(file)
+            with open('log/'+file,'r',encoding='utf-8') as f:
+                raw = f.read()
+                raw = raw.replace('\n','<br>')
+                log_html+='<p class="lead">{}</p>'.format(raw)
+        self.render('watch_log.html',logs=log_html)
 
 
 class TmpHanlder(BaseHandler):
@@ -93,7 +95,7 @@ if __name__ == '__main__':
             (r"/dict", DictHandler),
             (r'/qrcode', QRCodeHandler),
             (r'/tmp', TmpHanlder),
-            (r'/pingjiao', PingjiaoHandler)
+            (r'/log', WatchLogHandler)
         ],
         **settings
     )
