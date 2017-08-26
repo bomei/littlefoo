@@ -6,7 +6,7 @@ from selenium import webdriver
 from selenium.webdriver import ActionChains
 import threading
 import os
-
+import json
 
 class Member:
     def __init__(self, name, banji, danwei):
@@ -32,11 +32,12 @@ class Pingjiao:
         self.log_info_dict = dict()
         self.log_file = 'log/pingjiao.log'
         self.today = arrow.now().format('YYYY-MM-DD')
-        if os.path.exists('log/used_url.log'):
-            with open('log/used_url.log','r',encoding='utf-8') as f:
-                self.used_url = f.readlines()
+        if os.path.exists('log/used_url.log.yml'):
+            self.used_url = yaml.load(open('log/used_url.log.yml','r',encoding='utf-8'))
+            if not isinstance(self.used_url,dict):
+                self.used_url=dict()
         else:
-            self.used_url = []
+            self.used_url = dict()
 
     def log_once(self, name, title):
         self.log_info_dict[arrow.now().isoformat()] = [name, title]
@@ -51,7 +52,7 @@ class Pingjiao:
             f.write(log)
 
     def pingjiao(self):
-        if self.url in self.used_url:
+        if self.url in self.used_url.values():
             return
         browser = webdriver.Firefox()
         with open('pingjiao/pingjiao_template.js', 'r', encoding='utf-8') as f:
@@ -73,9 +74,8 @@ class Pingjiao:
             time.sleep(0.5)
         browser.quit()
         self.log_to_file()
-        self.used_url.append(self.url)
-        with open('log/used_url.log','w',encoding='utf-8') as f:
-            f.write(self.used_url)
+        self.used_url[self.today]=self.url
+        yaml.dump(self.used_url,open('log/used_url.log.yml','w',encoding='utf-8'))
 
     def run(self):
         t=threading.Thread(target=self.pingjiao)

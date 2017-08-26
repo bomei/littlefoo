@@ -50,10 +50,7 @@ class QRCodeHandler(BaseHandler):
     def post(self, *args, **kwargs):
         url = self.get_argument('qr-url')  # type:str
         print(url)
-        url_file = 'latest_url.txt'
         if url is not None:
-            with open(url_file, 'w', encoding='utf-8') as f:
-                f.write(url)
             pj = Pingjiao(url, dry_run=False)
             pj.run()
         self.write(url)
