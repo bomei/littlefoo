@@ -42,11 +42,12 @@
                     qrcode.callback = function (res) {
 //                        console.log(res);
                         $("#qrcode-res").html(res);
+                        $("#post-url-res").html('pingjiao ...');
                         $.post("/qrcode", {'qr-url':res}, function (data, status) {
                             if(status === 'success'){
-                                if(data === $("#qrcode-res").html()){
-                                    $("#post-url-res").html('Post url seccess!')
-                                }
+
+                                $("#post-url-res").html(data);
+
                             }
                             else{
                                 alert('Ajax失败');

@@ -7,6 +7,7 @@ from selenium.webdriver import ActionChains
 import threading
 import os
 import json
+import asyncio
 
 class Member:
     def __init__(self, name, banji, danwei):
@@ -14,10 +15,13 @@ class Member:
         self.banji = banji
         self.danwei = danwei
 
+    def __str__(self):
+        return 'name:{} | banji:{} | danwei:{}'.format(self.name,self.banji,self.danwei)
 
 class Group:
     def __init__(self, yaml_file):
         buddy_info = yaml.load(open(yaml_file, 'r', encoding='utf-8'))
+        print('raw yaml rendered..',buddy_info)
         buddy_info=buddy_info['members']
         self.members = list()
         for each in buddy_info:
@@ -26,8 +30,10 @@ class Group:
 
 class Pingjiao:
     def __init__(self, url, dry_run=True):
+        print('in pingjiao init')
         self.dry_run = dry_run
         self.group = Group('pingjiao/members.yml').members
+        print(self.group)
         self.url = url
         self.log_info_dict = dict()
         self.log_file = 'log/pingjiao.log'
@@ -51,10 +57,12 @@ class Pingjiao:
                 log += this_log
             f.write(log)
 
-    def pingjiao(self):
+    async def pingjiao(self):
+        print(self.url,'in pingjiao func...before')
         if self.url in self.used_url.values():
             return
         browser = webdriver.Firefox()
+        print(self.url,' this is in pingjiao func...')
         with open('pingjiao/pingjiao_template.js', 'r', encoding='utf-8') as f:
             js = f.read()
         for each in self.group:  # type: Member
@@ -76,6 +84,7 @@ class Pingjiao:
         self.log_to_file()
         self.used_url[self.today]=self.url
         yaml.dump(self.used_url,open('log/used_url.log.yml','w',encoding='utf-8'))
+        return 'pingjiao finish'
 
     def run(self):
         t=threading.Thread(target=self.pingjiao)

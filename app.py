@@ -47,13 +47,13 @@ class QRCodeHandler(BaseHandler):
     def get(self):
         self.render('solve_qrcode.html')
 
-    def post(self, *args, **kwargs):
+    async def post(self, *args, **kwargs):
         url = self.get_argument('qr-url')  # type:str
         print(url)
         if url is not None:
             pj = Pingjiao(url, dry_run=False)
-            pj.run()
-        self.write(url)
+            res = await pj.pingjiao()
+            self.write(res)
 
 
 class WatchLogHandler(BaseHandler):
