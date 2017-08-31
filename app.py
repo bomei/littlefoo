@@ -52,13 +52,13 @@ class QRCodeHandler(BaseHandler):
         print(url)
         if url is not None:
             pj = Pingjiao(url, dry_run=False)
-            res = await pj.pingjiao()
-            self.write(res)
+            pj.run()
+        self.write('work on')
 
 
 class WatchLogHandler(BaseHandler):
     def get(self):
-        log_file = os.listdir('log')
+        log_file = set(os.listdir('log'))-{'tornado.log'}
         log_html=''
         for file in log_file:
             log_html+='<h1>{}</h1>'.format(file)

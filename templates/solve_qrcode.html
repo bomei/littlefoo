@@ -60,6 +60,22 @@
             reader.readAsDataURL(file);
         }
 
+        function justUploadUrl() {
+            var res = $('#qr-url').val();
+            $("#qrcode-res").html(res);
+            $("#post-url-res").html('pingjiao ...');
+            $.post("/qrcode", {'qr-url':res}, function (data, status) {
+                if(status === 'success'){
+
+                    $("#post-url-res").html(data);
+
+                }
+                else{
+                    alert('Ajax失败');
+                }
+            });
+        }
+
         function uploadProgress(evt) {
             if (evt.lengthComputable) {
                 var percentComplete = Math.round(evt.loaded * 100 / evt.total);
@@ -141,10 +157,11 @@
         <div id="qrcode-res"></div>
         <div id="post-url-res"></div>
 
-        <form id="form2" style="display:none" method="post" action="/qrcode">
+        <form id="form2">
             <div>
+                <label for="qr-url">Or enter the url</label>
                 <input id="qr-url" type="text" name="qr-url">
-                <input type="submit" id="submit-btn">
+                <input type="button" id="submit-btn" value="Upload" onclick="justUploadUrl()">
             </div>
 
         </form>
